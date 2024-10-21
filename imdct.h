@@ -11,5 +11,5 @@ typedef struct {
 } Mdct;
 
 void InitMdct();
-void RunImdct(Mdct* mdct, float* input, float* output);
+void RunImdct(Mdct* mdct, double* input, double* output);
 

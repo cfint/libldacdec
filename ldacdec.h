@@ -41,8 +41,8 @@ struct Channel {
     int quantizedSpectra[MAX_FRAME_SAMPLES];
     int quantizedSpectraFine[MAX_FRAME_SAMPLES];
 
-    float spectra[MAX_FRAME_SAMPLES];
-    float pcm[MAX_FRAME_SAMPLES];
+    double spectra[MAX_FRAME_SAMPLES];
+    double pcm[MAX_FRAME_SAMPLES];
     Mdct mdct;
 };
 

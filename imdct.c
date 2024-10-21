@@ -145,13 +145,13 @@ void InitMdct()
 }
 
 
-static void Dct4(Mdct* mdct, float* input, float* output);
+static void Dct4(Mdct* mdct, double* input, double* output);
 
-void RunImdct(Mdct* mdct, float* input, float* output)
+void RunImdct(Mdct* mdct, double* input, double* output)
 {
 	const int size = 1 << mdct->Bits;
 	const int half = size / 2;
-	float dctOut[MAX_FRAME_SAMPLES] = { 0.f };
+	double dctOut[MAX_FRAME_SAMPLES] = { 0.f };
 	const double* window = GetImdctWindow(mdct->Bits);
 	double* previous = mdct->ImdctPrevious;
 
@@ -166,7 +166,8 @@ void RunImdct(Mdct* mdct, float* input, float* output)
     }
 }
 
-static void Dct4(Mdct* mdct, float* input, float* output)
+
+static void Dct4(Mdct* mdct, double* input, double* output)
 {
 	int MdctBits = mdct->Bits;
 	int MdctSize = 1 << MdctBits;
