@@ -6,6 +6,7 @@
 #include "ldacdec.h"
 #include "spectrum.h"
 #include "log.h"
+#include "utility.h"
 
 #define LDAC_MAXNQUS          34
 #define LDAC_MAXNSPS          16
@@ -75,14 +76,14 @@ static const int decode4DSpectrum[128] = {
     Quantization Tables
 ***************************************************************************************************/
 /* Inverse of Quantize Factor for Spectrum/Residual Quantization */
-static const double QuantizerStepSize[16] = {
+static const DECIMAL QuantizerStepSize[16] = {
     2.0000000000000000e+00, 6.6666666666666663e-01, 2.8571428571428570e-01, 1.3333333333333333e-01,
     6.4516129032258063e-02, 3.1746031746031744e-02, 1.5748031496062992e-02, 7.8431372549019607e-03,
     3.9138943248532287e-03, 1.9550342130987292e-03, 9.7703957010258913e-04, 4.8840048840048840e-04,
     2.4417043096081065e-04, 1.2207776353537203e-04, 6.1037018951994385e-05, 3.0518043793392844e-05,
 };
 
-static const double QuantizerFineStepSize[16] =
+static const DECIMAL QuantizerFineStepSize[16] =
 {
 	3.0518043793392844e-05, 1.0172681264464281e-05, 4.3597205419132631e-06, 2.0345362528928561e-06,
 	9.8445302559331759e-07, 4.8441339354591809e-07, 2.4029955742829012e-07, 1.1967860311134448e-07,
@@ -157,13 +158,13 @@ static void dequantizeQuantUnit( channel_t* this, int band )
 {
     const int subBandIndex = ga_isp_ldac[band];
     const int subBandCount = ga_nsps_ldac[band];
-    const double stepSize = QuantizerStepSize[this->precisions[band]];
-    const double stepSizeFine = QuantizerFineStepSize[this->precisions[band]];
+    const DECIMAL stepSize = QuantizerStepSize[this->precisions[band]];
+    const DECIMAL stepSizeFine = QuantizerFineStepSize[this->precisions[band]];
 
     for( int sb=0; sb<subBandCount; ++sb )
     {
-        const double coarse = this->quantizedSpectra[subBandIndex+sb] * stepSize;
-        const double fine = this->quantizedSpectraFine[subBandIndex+sb] * stepSizeFine;
+        const DECIMAL coarse = this->quantizedSpectra[subBandIndex+sb] * stepSize;
+        const DECIMAL fine = this->quantizedSpectraFine[subBandIndex+sb] * stepSizeFine;
         this->spectra[subBandIndex + sb] = coarse + fine;
     }
 }
@@ -182,7 +183,7 @@ void dequantizeSpectra( channel_t *this )
     LOG_ARRAY_LEN( this->spectra, "%e, ", ga_isp_ldac[frame->quantizationUnitCount-1] + ga_nsps_ldac[frame->quantizationUnitCount-1] ); 
 }
 
-static const double spectrumScale[32] =
+static const DECIMAL spectrumScale[32] =
 {
 	3.0517578125e-5, 6.1035156250e-5, 1.2207031250e-4, 2.4414062500e-4,
 	4.8828125000e-4, 9.7656250000e-4, 1.9531250000e-3, 3.9062500000e-3,
@@ -198,7 +199,7 @@ void scaleSpectrum(channel_t* this)
 {
     const frame_t *frame = this->frame;
 	const int quantUnitCount = frame->quantizationUnitCount;
-	double  * const spectra = this->spectra;
+	DECIMAL  * const spectra = this->spectra;
 
 	for (int i = 0; i < quantUnitCount; i++)
 	{
