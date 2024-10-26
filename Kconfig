@@ -1,0 +1,9 @@
+menu "LDAC decoder"
+
+    config LDAC_DECODER
+        bool "Enable LDAC decoder"
+        default n
+        help
+            LDAC decoder.
+
+endmenu
